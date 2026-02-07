@@ -107,9 +107,59 @@ df.head()
 df.insull().sum()
 df['ano'].unique()
 df[df.isnull().any(axis=1)].head()
-import numpy as np
 
-df_salarios = pdf.DataFrame({
-    'nome' : ['Ana', 'bruno', 'Carlos', 'Daniele', 'Val'],
-    'moeda' : [4000, np.nan, 5000, nap.nan, 10000]
+# import numpy as np
+# df_salarios = pdf.DataFrame({
+#     'nome' : ['Ana', 'bruno', 'Carlos', 'Daniele', 'Val'],
+#     'moeda' : [4000, np.nan, 5000, nap.nan, 10000]
+# })
+# '''Calcula mediana e substitui os nulos pela mediana'''
+# df_salarios['salario_media'] = df_salarios['moeda'].fillna(df_salarios['moeda'].media(2))
+# display(df_salarios)
+
+import numpy as np
+df_salarios = pd.DataFrame({
+    'nome' : ['Ana','Bruno','Carlos','Daniele','Val'],
+    'moeda' : [4000, np.nan, 5000, np.nan , 10000]
 })
+#Calcular a media salarial e substitui os nulos pela media a arrendonda os valores
+df_salarios['salario_media'] = df_salarios['moeda'].fillna(df_salarios['moeda'].mean().reound(2))
+display(df_salarios)
+
+df_temperatura = pd.DataFrame({
+    "Dia" : ['Segunda','Terça','Quarta','Quinta','Sexta'],
+    "Temperatura" : [30, np.nan, np.nan, 28, 27]
+})
+df_temperatura['Preenchido_ffill'] = df_temperatura['Temperatura'].fillna()
+display(df_temperatura)
+
+df_cidade = pd.DataFrame({
+    'nome' : ["Ana","Bruno","Carlos","Daniele","Val"],
+    'cidade' : ["São paulo", np.nan, "Curitiba", np.nan, "Belém"]
+})
+df_cidade['Cidade-preenchida'] = df_cidade["cidade"].fillna("Não informada")
+display(df_cidade)
+df_limpo = df.dropna()
+df_limpo.isnull().sum()
+df_limpo.head()
+df_limpo.info()
+df_limpo = df_limpo.assign(ano = df_limpo['ano'].astype('int64'))
+##Aula 3 Grafico
+df_limpo.head()
+df_limpo['senioridade'].value_counts().plot(kind='bar', title='Distribuição de senioridade')
+
+import seaborn as sn
+sn.barplot(data=df_limpo, x='senioridade' , y='usd')
+
+import matplotlib.pyplot as plt
+plt.figure(figsize=(8,5))
+sn.barplot(data=df_limpo, x='senioridade', y='usd')
+plt.title("Salario medio por senioridade")
+plt.xlabel("Senioridade")
+plt.ylabel("Salario media anual (usd)")
+plt.show()
+
+ordem = df_limpo.groupby('senioridade')['usd'].mean().sort_values(ascending=True).index
+print(ordem)
+
+plt.figure(figsize=(8,5))
